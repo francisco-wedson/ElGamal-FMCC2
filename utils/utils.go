@@ -17,6 +17,25 @@ func ExponenciacaoModular(base, expoente, modulo int) int {
 	return expoenteModular
 } 
 
-func InversoModular(valor, modulo int) int {
-	
+/*
+	Funcao Thotiente de Euler que calcula a quantidade de coprimos de um determinado valor inteiro
+*/
+func Totiente(n int) int {
+    resultado := n
+    valor := n
+
+    for i := 2; i * i <= valor; i++ {
+        if valor % i == 0 {
+            resultado -= resultado / i
+            for valor % i == 0 {
+                valor /= i
+            }
+        }
+    }
+
+    if valor > 1 {
+        resultado -= resultado / valor
+    }
+
+    return resultado
 }
