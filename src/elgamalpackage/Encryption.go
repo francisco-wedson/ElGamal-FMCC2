@@ -3,13 +3,15 @@ package elgamalpackage
 import (
 	"crypto/rand"
 	"math/big"
+
+	"./utils"
 )
 
 func geradorChavePublica(generator big.Int, p big.Int, intermediate big.Int) (big.Int, big.Int) {
 	privateKey, _ := rand.Int(rand.Reader, &p)
 
-	var publicKey = ExponeciacaoModular(intermediate, privateKey, p)
-	var h = ExponenciacaoModular(generator, privateKey, p)
+	var publicKey = utils.ExponenciacaoModular(intermediate, privateKey, p)
+	var h = utils.ExponenciacaoModular(generator, privateKey, p)
 
 	return publicKey, h
 }
