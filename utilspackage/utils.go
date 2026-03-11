@@ -4,13 +4,13 @@ package utils
 	Essa funcao calcula o resultado da exponenciacao modular, recebendo a base, o expoente e o modulo, respectivamente e retornando o valor do da exponenciacao modular
 	Baseado em: https://en.wikipedia.org/wiki/Modular_exponentiation#Memory-efficient_method
 */
-func ExponenciacaoModular(base, expoente, modulo int) int {
+func ExponenciacaoModular(base, expoente, modulo int64) int64 {
 	if modulo == 1 {
 		return 0
 	}
-	var expoenteModular int = 1
+	var expoenteModular int64 = 1
 
-	for expoenteTeste := 0; expoenteTeste < expoente; expoenteTeste++ {
+	for expoenteTeste := 0; int64(expoenteTeste) < expoente; expoenteTeste++ {
 		expoenteModular = (base * expoenteModular) % modulo
 	}
 
@@ -21,15 +21,15 @@ func ExponenciacaoModular(base, expoente, modulo int) int {
 	Funcao Thotiente de Euler que calcula a quantidade de coprimos de um determinado valor inteiro
 	Baseado em: https://en.wikipedia.org/wiki/Euler%27s_totient_function#Computing_Euler's_totient_function
 */
-func Totiente(n int) int {
+func Totiente(n int64) int64 {
     resultado := n
     valor := n
 
-    for i := 2; i * i <= valor; i++ {
-        if valor % i == 0 {
-            resultado -= resultado / i
-            for valor % i == 0 {
-                valor /= i
+    for i := 2; int64(i * i) <= valor; i++ {
+        if valor % int64(i) == 0 {
+            resultado -= resultado / int64(i)
+            for valor % int64(i) == 0 {
+                valor /= int64(i)
             }
         }
     }
@@ -45,7 +45,7 @@ func Totiente(n int) int {
 	Funçao que retorna o inverso modular de determinado valor em determinado modulo
 	Baseado em: https://en.wikipedia.org/wiki/Modular_multiplicative_inverse#Computation
 */
-func InversoModular(valor, modulo int) int {
+func InversoModular(valor, modulo int64) int64 {
 	if mdc(valor, modulo) != 1 {
 		return -1
 	}
@@ -55,8 +55,8 @@ func InversoModular(valor, modulo int) int {
 /*
 	Funcao auxiliar para calcular o mdc entre dois inteiros
 */
-func mdc(a, b int) int {
-	var resto int
+func mdc(a, b int64) int64 {
+	var resto int64
 
 	for a % b > 0 {
 		resto = a % b
