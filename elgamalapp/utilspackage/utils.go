@@ -9,13 +9,13 @@ import (
 Essa funcao calcula o resultado da exponenciacao modular, recebendo a base, o expoente e o modulo, respectivamente e retornando o valor do da exponenciacao modular
 Baseado em: https://en.wikipedia.org/wiki/Modular_exponentiation#Memory-efficient_method
 */
-func ExponenciacaoModular(base, expoente, modulo big.Int) big.Int {
+func ExponenciacaoModular(base, expoente, modulo big.Int) *big.Int {
 	if modulo.Int64() == 1 {
-		return *big.NewInt(0)
+		return big.NewInt(0)
 	}
 	expoenteModular := big.NewInt(1)
 
-	return *expoenteModular.Exp(&base, &expoente, &modulo)
+	return expoenteModular.Exp(&base, &expoente, &modulo)
 }
 
 /*
@@ -71,8 +71,14 @@ func mdc(a, b int64) int64 {
 /*
 Função auxiliar para gerar um número primo pseudo-aleatório, criptograficamente seguro
 */
-func GerarPrimo(keySize int) (big.Int, error) {
+func GerarPrimo(keySize int) *big.Int {
 	n, _ := rand.Prime(rand.Reader, keySize)
 
-	return *n, nil
+	return n
+}
+
+func IntFromHex(hex string) *big.Int {
+	n, _ := new(big.Int).SetString(hex, 16)
+
+	return n
 }

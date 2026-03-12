@@ -1,38 +1,49 @@
 package elgamal
 
 import (
-	"crypto/rand"
-	"elgamalapp/utils"
+	"errors"
 	"math/big"
 )
 
-func GeradorChavePublica(generator, p, intermediate big.Int) (*big.Int, *big.Int) {
-
-	privateKey, _ := rand.Int(rand.Reader, &p)
-
-	publicKey := utils.ExponenciacaoModular(intermediate, *privateKey, p)
-	cipherText1 := utils.ExponenciacaoModular(generator, *privateKey, p)
-
-	return &publicKey, &cipherText1
+type PublicKey struct {
+	G, P, Y *big.Int
 }
 
+type PrivateKey struct {
+	PublicKey
+	X *big.Int
+}
+
+func GeradorChavePublica(priv PrivateKey) (*big.Int, error) {
+
+	if priv.X.Cmp(big.NewInt(1)) <= 0 {
+		return nil, errors.New("PrivateKey X must be: X > 1")
+	} else if priv.G.Cmp(big.NewInt(1)) <= 0 {
+		return nil, errors.New("Cannot generate group elements with G=1")
+	} else {
+		Y := new(big.Int).Exp(priv.G, priv.X, priv.P)
+		return Y, nil
+	}
+}
+
+/*
 func Encriptacao(generator big.Int, keySize int, prime big.Int, intermediate big.Int, mensagem string) (*big.Int, []*big.Int) {
 
-	K, c1 := GeradorChavePublica(generator, prime, intermediate)
+		K, c1 := GeradorChavePublica(generator, prime, intermediate)
 
-	var c2 []*big.Int
+		var c2 []*big.Int
 
-	mensagemBytes := StringToInt(mensagem)
+		mensagemBytes := StringToInt(mensagem)
 
-	for _, letra := range mensagemBytes {
-		//falta converter chr para int
+		for _, letra := range mensagemBytes {
+			//falta converter chr para int
 
-		c2 = append(c2, CodificaDigito(*big.NewInt(letra), *K, prime))
+			c2 = append(c2, CodificaDigito(*big.NewInt(letra), *K, prime))
+		}
+
+		return c1, c2
 	}
-
-	return c1, c2
-}
-
+*/
 func CodificaDigito(digito big.Int, chavePublica big.Int, p big.Int) *big.Int {
 	var mult big.Int
 	mult.Mul(&digito, &chavePublica)
