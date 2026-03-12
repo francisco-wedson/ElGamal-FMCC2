@@ -1,11 +1,12 @@
-package utils
+package testes
 
 import (
+	"elgamalapp/utils"
 	"testing"
 )
 
 func TestExponenciacaoModularBasica(t *testing.T) {
-	got := ExponenciacaoModular(2, 3, 5)
+	got := utils.ExponenciacaoModular(2, 3, 5)
 	var want int64 = 3
 	if got != want {
 		t.Errorf("Got %d, but want %d\n", got, want)
@@ -13,7 +14,7 @@ func TestExponenciacaoModularBasica(t *testing.T) {
 }
 
 func TestExponenciacaoModularPonteciaNula(t *testing.T) {
-	got := ExponenciacaoModular(123, 0, 7)
+	got := utils.ExponenciacaoModular(123, 0, 7)
 	var want int64 = 1
 	if got != want {
 		t.Errorf("Got %d, but want %d\n", got, want)
@@ -21,7 +22,7 @@ func TestExponenciacaoModularPonteciaNula(t *testing.T) {
 }
 
 func TestExponenciacaoModularBaseMaiorQueModulo(t *testing.T) {
-	got := ExponenciacaoModular(10, 2, 7)
+	got := utils.ExponenciacaoModular(10, 2, 7)
 	var want int64 = 2
 	if got != want {
 		t.Errorf("Got %d, but want %d\n", got, want)
@@ -29,7 +30,7 @@ func TestExponenciacaoModularBaseMaiorQueModulo(t *testing.T) {
 }
 
 func TestExponenciacaoModularOverflow(t *testing.T) {
-	got := ExponenciacaoModular(2, 10, 1000)
+	got := utils.ExponenciacaoModular(2, 10, 1000)
 	var want int64 = 24
 	if got != want {
 		t.Errorf("Got %d, but want %d\n", got, want)
@@ -37,7 +38,7 @@ func TestExponenciacaoModularOverflow(t *testing.T) {
 }
 
 func TestExponenciacaoModularPequenoTeoremaDeFermat(t *testing.T) {
-	got := ExponenciacaoModular(5, 1_000_000_006, 1_000_000_007)
+	got := utils.ExponenciacaoModular(5, 1_000_000_006, 1_000_000_007)
 	var want int64 = 1
 	if got != want {
 		t.Errorf("Got %d, but want %d\n", got, want)
@@ -45,7 +46,7 @@ func TestExponenciacaoModularPequenoTeoremaDeFermat(t *testing.T) {
 }
 
 func TestExponenciacaoModularBaseModuloIguais(t *testing.T) {
-	got := ExponenciacaoModular(7, 10, 7)
+	got := utils.ExponenciacaoModular(7, 10, 7)
 	var want int64 = 0
 	if got != want {
 		t.Errorf("Got %d, but want %d\n", got, want)
@@ -53,7 +54,7 @@ func TestExponenciacaoModularBaseModuloIguais(t *testing.T) {
 }
 
 func TestInversoModularBasicoPrimos(t *testing.T) {
-	got := InversoModular(3, 7)
+	got := utils.InversoModular(3, 7)
 	var want int64 = 5
 	if got != want {
 		t.Errorf("Got %d, but want %d\n", got, want)
@@ -61,16 +62,15 @@ func TestInversoModularBasicoPrimos(t *testing.T) {
 }
 
 func TestInversoModularModuloComposto(t *testing.T) {
-	got := InversoModular(3, 10)
+	got := utils.InversoModular(3, 10)
 	var want int64 = 7
 	if got != want {
 		t.Errorf("Got %d, but want %d\n", got, want)
 	}
 }
 
-
 func TestInversoModularInexistente(t *testing.T) {
-	got := InversoModular(2, 4)
+	got := utils.InversoModular(2, 4)
 	var want int64 = -1
 	if got != want {
 		t.Errorf("Got %d, but want %d\n", got, want)
@@ -78,7 +78,7 @@ func TestInversoModularInexistente(t *testing.T) {
 }
 
 func TestInversoModularLimiar(t *testing.T) {
-	got := InversoModular(12, 13)
+	got := utils.InversoModular(12, 13)
 	var want int64 = 12
 	if got != want {
 		t.Errorf("Got %d, but want %d\n", got, want)
@@ -86,7 +86,7 @@ func TestInversoModularLimiar(t *testing.T) {
 }
 
 func TestInversoModularOverflow(t *testing.T) {
-	got := InversoModular(2, 1_000_000_007)
+	got := utils.InversoModular(2, 1_000_000_007)
 	var want int64 = 500000004
 	if got != want {
 		t.Errorf("Got %d, but want %d\n", got, want)
