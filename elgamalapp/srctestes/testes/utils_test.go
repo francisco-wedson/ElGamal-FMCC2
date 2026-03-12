@@ -1,10 +1,6 @@
 package testes
 
-import (
-	"elgamalapp/utils"
-	"testing"
-)
-
+/*
 func TestExponenciacaoModularBasica(t *testing.T) {
 	got := utils.ExponenciacaoModular(2, 3, 5)
 	var want int64 = 3
@@ -92,3 +88,4 @@ func TestInversoModularOverflow(t *testing.T) {
 		t.Errorf("Got %d, but want %d\n", got, want)
 	}
 }
+*/

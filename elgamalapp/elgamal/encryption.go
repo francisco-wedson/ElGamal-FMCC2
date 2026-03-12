@@ -6,19 +6,19 @@ import (
 	"math/big"
 )
 
-func GeradorChavePublica(generator int64, p int64, intermediate int64) (*big.Int, *big.Int) {
+func GeradorChavePublica(generator, p, intermediate big.Int) (*big.Int, *big.Int) {
 
-	privateKey, _ := rand.Int(rand.Reader, big.NewInt(p))
+	privateKey, _ := rand.Int(rand.Reader, &p)
 
-	var publicKey = big.NewInt(utils.ExponenciacaoModular(intermediate, privateKey.Int64(), p))
-	var cipherText1 = big.NewInt(utils.ExponenciacaoModular(generator, privateKey.Int64(), p))
+	publicKey := utils.ExponenciacaoModular(intermediate, *privateKey, p)
+	cipherText1 := utils.ExponenciacaoModular(generator, *privateKey, p)
 
-	return publicKey, cipherText1
+	return &publicKey, &cipherText1
 }
 
-func Encriptacao(generator *big.Int, keySize int, prime *big.Int, intermediate *big.Int, mensagem string) (*big.Int, []*big.Int) {
+func Encriptacao(generator big.Int, keySize int, prime big.Int, intermediate big.Int, mensagem string) (*big.Int, []*big.Int) {
 
-	K, c1 := GeradorChavePublica(generator.Int64(), prime.Int64(), intermediate.Int64())
+	K, c1 := GeradorChavePublica(generator, prime, intermediate)
 
 	var c2 []*big.Int
 
@@ -27,7 +27,7 @@ func Encriptacao(generator *big.Int, keySize int, prime *big.Int, intermediate *
 	for _, letra := range mensagemBytes {
 		//falta converter chr para int
 
-		c2 = append(c2, CodificaDigito(*big.NewInt(letra), *K, *prime))
+		c2 = append(c2, CodificaDigito(*big.NewInt(letra), *K, prime))
 	}
 
 	return c1, c2

@@ -9,17 +9,13 @@ import (
 Essa funcao calcula o resultado da exponenciacao modular, recebendo a base, o expoente e o modulo, respectivamente e retornando o valor do da exponenciacao modular
 Baseado em: https://en.wikipedia.org/wiki/Modular_exponentiation#Memory-efficient_method
 */
-func ExponenciacaoModular(base, expoente, modulo int64) int64 {
-	if modulo == 1 {
-		return 0
+func ExponenciacaoModular(base, expoente, modulo big.Int) big.Int {
+	if modulo.Int64() == 1 {
+		return *big.NewInt(0)
 	}
-	var expoenteModular int64 = 1
+	expoenteModular := big.NewInt(1)
 
-	for expoenteTeste := 0; int64(expoenteTeste) < expoente; expoenteTeste++ {
-		expoenteModular = (base * expoenteModular) % modulo
-	}
-
-	return expoenteModular
+	return *expoenteModular.Exp(&base, &expoente, &modulo)
 }
 
 /*
@@ -49,14 +45,14 @@ func Totiente(n int64) int64 {
 /*
 Funçao que retorna o inverso modular de determinado valor em determinado modulo
 Baseado em: https://en.wikipedia.org/wiki/Modular_multiplicative_inverse#Computation
-*/
+
 func InversoModular(valor, modulo int64) int64 {
 	if mdc(valor, modulo) != 1 {
 		return -1
 	}
 	return ExponenciacaoModular(valor, Totiente(modulo)-1, modulo)
 }
-
+*/
 /*
 Funcao auxiliar para calcular o mdc entre dois inteiros
 */
