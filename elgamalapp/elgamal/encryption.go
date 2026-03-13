@@ -1,6 +1,8 @@
 package elgamal
 
 import (
+	"crypto/rand"
+	"encoding/base64"
 	"errors"
 	"math/big"
 )
@@ -26,33 +28,34 @@ func GeradorChavePublica(priv PrivateKey) (*big.Int, error) {
 	}
 }
 
-/*
-func Encriptacao(generator big.Int, keySize int, prime big.Int, intermediate big.Int, mensagem string) (*big.Int, []*big.Int) {
+func Encriptacao(priv *PrivateKey, mensagem string) (string, []string) {
 
-		K, c1 := GeradorChavePublica(generator, prime, intermediate)
+	K, _ := rand.Int(rand.Reader, new(big.Int).Sub(priv.P, big.NewInt(1)))
 
-		var c2 []*big.Int
+	c1_bytes := new(big.Int).Exp(priv.G, K, priv.P).Bytes()
 
-		mensagemBytes := StringToInt(mensagem)
+	var c2 []string
 
-		for _, letra := range mensagemBytes {
-			//falta converter chr para int
+	mensagem_bytes := StringToInt(mensagem)
 
-			c2 = append(c2, CodificaDigito(*big.NewInt(letra), *K, prime))
-		}
-
-		return c1, c2
+	for _, letra := range mensagem_bytes {
+		encoded_digit := CodificaDigito(big.NewInt(letra), *priv, K).Bytes()
+		c2 = append(c2, base64.StdEncoding.EncodeToString(encoded_digit))
 	}
-*/
-func CodificaDigito(digito big.Int, chavePublica big.Int, p big.Int) *big.Int {
-	var mult big.Int
-	mult.Mul(&digito, &chavePublica)
 
-	return mult.Rem(&mult, &p)
+	c1 := base64.StdEncoding.EncodeToString(c1_bytes)
+
+	return c1, c2
+}
+
+func CodificaDigito(digito *big.Int, priv PrivateKey, K *big.Int) *big.Int {
+
+	mult := new(big.Int).Mul(digito, new(big.Int).Exp(priv.Y, K, priv.P))
+
+	return mult.Rem(mult, priv.P)
 }
 
 func StringToInt(String string) []int64 {
-	//1. Converter string para sequencia de bytes
 	var StringBytes []int64
 	for _, char := range String {
 		StringBytes = append(StringBytes, int64(char))
