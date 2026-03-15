@@ -89,4 +89,19 @@ func TestCriptografarMensagem(t *testing.T) {
 			t.Errorf("got %s; want %s", c2[i], expected_c2[i])
 		}
 	}
+
+}
+
+func TestDescriptografarMensagem(t *testing.T) {
+	priv := SetUp(t)
+	priv.Y, _ = elgamal.GeradorChavePublica(*priv)
+
+	mensagem := "elgamal é muito legal"
+	c1, c2 := elgamal.Encriptacao(priv, mensagem)
+
+	str := elgamal.Decriptacao(priv, c1, c2)
+
+	if str != mensagem {
+		t.Errorf("got %s; want %s", str, mensagem)
+	}
 }

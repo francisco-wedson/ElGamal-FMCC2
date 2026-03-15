@@ -63,3 +63,38 @@ func StringToInt(String string) []int64 {
 
 	return StringBytes
 }
+
+func Decriptacao(priv *PrivateKey, c1 string, c2 []string) string {
+	c1_deco_base64, _ := base64.StdEncoding.DecodeString(c1)
+	c1_deco_bytes := new(big.Int).SetBytes(c1_deco_base64)
+
+	//Calcula o segredo S
+	s := new(big.Int).Exp(c1_deco_bytes, priv.X, priv.P)
+	s_mod_inverse := new(big.Int).ModInverse(s, priv.P)
+
+	var decrypted_message []*big.Int
+
+	for _, value := range c2 {
+		value_deco_base64, _ := base64.StdEncoding.DecodeString(value)
+		value_deco_bytes := new(big.Int).SetBytes(value_deco_base64)
+
+		// Isola-se o M e multiplica o valor de c2 pelo inverso modular de S (mod p)
+		M := new(big.Int).Mul(s_mod_inverse, value_deco_bytes)
+		M.Mod(M, priv.P)
+
+		decrypted_message = append(decrypted_message, M)
+	}
+
+	// Recuperando a mensagem, transformando cada unicode em string novamente
+	message := IntToString(decrypted_message)
+
+	return message
+}
+
+func IntToString(decrypted_message []*big.Int) string {
+	message := ""
+	for _, value := range decrypted_message {
+		message += string(rune(value.Int64()))
+	}
+	return message
+}
